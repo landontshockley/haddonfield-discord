@@ -43,7 +43,7 @@ function firstImage(post) {
 
 function rssItem({ post, displayName, heading }) {
   const handle = post.author.screen_name;
-  const link = `https://x.com/${handle}/status/${post.id}`;
+  const link = post.link || `https://x.com/${handle}/status/${post.id}`;
   const text = htmlEscape(post.text || "Post contains media.").replaceAll("\n", "<br>");
   let description = `<strong>${htmlEscape(displayName)} (@${htmlEscape(handle)})</strong><br><br>`
     + `${text}<br><br>🔗 <a href="${htmlEscape(link)}">View on X</a>`;
@@ -76,6 +76,18 @@ async function buildFeed() {
       if (post.replying_to) continue;
       if (!unique.has(String(post.id))) unique.set(String(post.id), { post, displayName, heading });
     }
+  });
+
+  unique.set("haddonfield-setup-test-20260912", {
+    post: {
+      id: "haddonfield-setup-test-20260912",
+      author: { screen_name: "HaddonfieldGGSetup" },
+      text: "Readybot and the hosted feed are connected. Future new posts from @HalloweenTVG and @IllFonic will appear here automatically.",
+      created_timestamp: Math.floor(Date.now() / 1000),
+      link: "https://landontshockley.github.io/haddonfield-discord/feed.xml",
+    },
+    displayName: "Haddonfield.gg",
+    heading: "✅ Haddonfield.gg Updates Test",
   });
 
   const items = [...unique.values()]
